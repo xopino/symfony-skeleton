@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  nginx:
+    image: 'nginx:alpine'
+    working_dir: /var/www/html
+    volumes:
+      - './application:/var/www/html'
+      - './docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+    ports:
+      - '8585:85'
+
+  php-fpm:
+    build: docker/php-fpm
+    working_dir: /var/www/html
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - './application:/var/www/html'
+      - './docker/php-fpm/php-ini-overrides.ini:/etc/php/8.1/fpm/conf.d/99-overrides.ini'
